@@ -1,0 +1,50 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.ridehome.castsink'
+    compileSdk 33
+    ndkVersion "21.1.6352462"
+
+    defaultConfig {
+        applicationId "com.ridehome.castsink"
+        minSdk 24
+        targetSdk 33
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        ndk{
+            abiFilters "arm64-v8a"  //,"armeabi-v7a"
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    externalNativeBuild{
+        ndkBuild{
+            path file("src/main/jni/Android.mk")
+        }
+    }
+}
+
+dependencies {
+   // implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
+    //implementation 'org.videolan.android:libvlc-all:3.5.4-eap4'
+    implementation 'pub.devrel:easypermissions:1.1.0'
+    implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation 'com.google.android.material:material:1.5.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+}
