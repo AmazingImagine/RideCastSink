@@ -22,7 +22,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ridehome.castsink.live555.live555player;
 import com.ridehome.castsink.wifip2p.activity.BaseActivity;
 import com.ridehome.castsink.wifip2p.service.Wifip2pService;
 import com.ridehome.castsink.wifip2p.socket.ReceiveSocket;
@@ -39,8 +38,6 @@ public class MainActivity extends BaseActivity implements ReceiveSocket.Progress
     private Intent mIntent;
 
     private View.OnLayoutChangeListener mOnLayoutChangeListener = null;
-
-    private StreamUi mStreamUI = null;
     private String mRtspUrl;
     private static MainActivity mInstance;
     public static MainActivity getInstance(){
@@ -52,7 +49,7 @@ public class MainActivity extends BaseActivity implements ReceiveSocket.Progress
         runOnUiThread(() -> {
             EditText urlText = (EditText) findViewById(R.id.rtspURL);
             urlText.setText(strUrl);
-            mStreamUI.Start(strUrl);
+            // 播放RTSP
         });
     }
 
@@ -88,8 +85,6 @@ public class MainActivity extends BaseActivity implements ReceiveSocket.Progress
         Button btnStopRTSP = (Button) findViewById(R.id.btn_stoprtsp);
         btnPlayRTSPP.setOnClickListener(this);
         btnStopRTSP.setOnClickListener(this);
-
-        mStreamUI = new StreamUi(0,  findViewById(R.id.video_surface));
     }
 
     @AfterPermissionGranted(1000)
@@ -173,11 +168,11 @@ public class MainActivity extends BaseActivity implements ReceiveSocket.Progress
             case R.id.btn_playrtsp: {
                 EditText urlText = (EditText) findViewById(R.id.rtspURL);
                 String strUrl = urlText.getText().toString();
-                mStreamUI.Start(strUrl);
+                //mStreamUI.Start(strUrl);
             }
                 break;
             case R.id.btn_stoprtsp:
-                mStreamUI.Stop();
+                //mStreamUI.Stop();
                 break;
         }
     }
@@ -239,58 +234,5 @@ public class MainActivity extends BaseActivity implements ReceiveSocket.Progress
         if (mIntent != null) {
             stopService(mIntent);
         }
-    }
-
-    public class StreamUi {
-        public void Start(String strRtspUrl){
-            if (mPlayer == null && mSurface != null) {
-                mPlayer = new live555player();
-            }
-            if (mPlayer == null) {
-                return;
-            }
-
-            mPlayer.start("", strRtspUrl, mSurface);
-        }
-
-        public void Stop(){
-            mPlayer.stop();
-        }
-
-
-        public StreamUi(int id, SurfaceView surfaceView) {
-            mId = id;
-            mSurfaceView = surfaceView;
-
-            SurfaceHolder holder = mSurfaceView.getHolder();
-            holder.addCallback(new SurfaceHolder.Callback() {
-                @Override
-                public void surfaceDestroyed(SurfaceHolder holder) {
-                    // TODO Auto-generated method stub
-                    Log.i("SURFACE", "destroyed");
-                    if (mPlayer != null) {
-                        mPlayer.stop();
-                    }
-                }
-
-                @Override
-                public void surfaceCreated(SurfaceHolder holder) {
-                    // TODO Auto-generated method stub
-                    Log.i("SURFACE", "create");
-                    mSurface = holder.getSurface();
-                }
-
-                @Override
-                public void surfaceChanged(SurfaceHolder holder, int format, int width,
-                                           int height) {
-                    // TODO Auto-generated method stub
-                }
-            });
-        }
-
-        private int mId;
-        private SurfaceView mSurfaceView;
-        private Surface mSurface;
-        private live555player mPlayer;
     }
 }
