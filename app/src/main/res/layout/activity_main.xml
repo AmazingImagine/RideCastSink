@@ -27,7 +27,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="370dp"
+        android:layout_height="480dp"
         android:orientation="horizontal">
         <Space
             android:layout_width="wrap_content"
@@ -36,7 +36,7 @@
 
         <com.ridehome.castsink.vlc.MyControlVlcVideoView
             android:id="@+id/player"
-            android:layout_width="270dp"
+            android:layout_width="240dp"
             android:layout_height="480dp"
             android:clickable="true" />
 
@@ -50,7 +50,7 @@
             android:id="@+id/rtspURL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="rtsp://192.168.49.253:12345"
+            android:text="rtsp://192.168.49.143:12345"
              />
 
         <LinearLayout

@@ -710,6 +710,7 @@ public class VlcPlayer implements MediaPlayerControl, Handler.Callback, IVLCVout
 
     @Override
     public void onNewVideoLayout(IVLCVout vlcVout, int width, int height, int visibleWidth, int visibleHeight, int sarNum, int sarDen) {
+
         if (videoSizeChange != null) {
             videoSizeChange.onVideoSizeChanged(width, height, visibleWidth, visibleHeight);
         }
