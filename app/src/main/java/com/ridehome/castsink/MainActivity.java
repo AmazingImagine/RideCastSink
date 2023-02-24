@@ -19,9 +19,11 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ridehome.castsink.vlc.MyControlVlcVideoView;
 import com.ridehome.castsink.wifip2p.activity.BaseActivity;
 import com.ridehome.castsink.wifip2p.service.Wifip2pService;
 import com.ridehome.castsink.wifip2p.socket.ReceiveSocket;
@@ -39,6 +41,12 @@ public class MainActivity extends BaseActivity implements ReceiveSocket.Progress
 
     private View.OnLayoutChangeListener mOnLayoutChangeListener = null;
     private String mRtspUrl;
+
+    public static String mPath01 = "https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AAOEcdM.img";
+    private RelativeLayout rootView;
+    private MyControlVlcVideoView mPlayerView;
+    private View.OnTouchListener onTouchVideoListener;
+
     private static MainActivity mInstance;
     public static MainActivity getInstance(){
         return mInstance;
@@ -50,7 +58,34 @@ public class MainActivity extends BaseActivity implements ReceiveSocket.Progress
             EditText urlText = (EditText) findViewById(R.id.rtspURL);
             urlText.setText(strUrl);
             // 播放RTSP
+            mPlayerView.setStartLive(strUrl);
         });
+    }
+
+    private void initView() {
+        mPlayerView = findViewById(R.id.player);
+        //触摸控制亮度和声音,是否可触摸开关
+        rootView = mPlayerView.getRootView();
+        onTouchVideoListener = mPlayerView.getOnTouchVideoListener();
+        rootView.setLongClickable(true);  //手势需要--能触摸
+        rootView.setOnTouchListener(onTouchVideoListener);
+
+        mPlayerView.setPlayerTitle("P2P投屏世界");
+
+        mPlayerView.setVlcControllerLayoutListener(new MyControlVlcVideoView.onVlcControllerLayoutListener() {
+            @Override
+            public void finishActivity() {
+                finish();
+            }
+        });
+
+//        mPlayerView.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                //开始播放
+//                mPlayerView.setStartLive(mPath01);
+//            }
+//        },500);
     }
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
@@ -85,6 +120,8 @@ public class MainActivity extends BaseActivity implements ReceiveSocket.Progress
         Button btnStopRTSP = (Button) findViewById(R.id.btn_stoprtsp);
         btnPlayRTSPP.setOnClickListener(this);
         btnStopRTSP.setOnClickListener(this);
+
+        initView();
     }
 
     @AfterPermissionGranted(1000)
