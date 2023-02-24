@@ -784,6 +784,8 @@ void DummySink::afterGettingFrame(unsigned frameSize, unsigned numTruncatedBytes
     envir() << "\n";
 #endif
 
+    ALOGD("[%s%d] Get Stream Data !! %s \n", __FUNCTION__, __LINE__, fSubsession.codecName());
+
     // map表,根据 codecName
     //to do something
     std::shared_ptr<MediaQueue> queue = nullptr;

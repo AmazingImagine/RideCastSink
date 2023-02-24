@@ -19,6 +19,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ridehome.castsink.live555.live555player;
@@ -40,13 +41,17 @@ public class MainActivity extends BaseActivity implements ReceiveSocket.Progress
     private View.OnLayoutChangeListener mOnLayoutChangeListener = null;
 
     private StreamUi mStreamUI = null;
+    private String mRtspUrl;
     private static MainActivity mInstance;
     public static MainActivity getInstance(){
         return mInstance;
     }
 
     public void StartPlay(String strUrl){
+        mRtspUrl = strUrl;
         runOnUiThread(() -> {
+            EditText urlText = (EditText) findViewById(R.id.rtspURL);
+            urlText.setText(strUrl);
             mStreamUI.Start(strUrl);
         });
     }
@@ -79,6 +84,10 @@ public class MainActivity extends BaseActivity implements ReceiveSocket.Progress
         Button btnRemove = (Button) findViewById(R.id.btn_remove);
         btnCreate.setOnClickListener(this);
         btnRemove.setOnClickListener(this);
+        Button btnPlayRTSPP = (Button) findViewById(R.id.btn_playrtsp);
+        Button btnStopRTSP = (Button) findViewById(R.id.btn_stoprtsp);
+        btnPlayRTSPP.setOnClickListener(this);
+        btnStopRTSP.setOnClickListener(this);
 
         mStreamUI = new StreamUi(0,  findViewById(R.id.video_surface));
     }
@@ -160,6 +169,15 @@ public class MainActivity extends BaseActivity implements ReceiveSocket.Progress
                 break;
             case R.id.btn_remove:
                 removeGroup();
+                break;
+            case R.id.btn_playrtsp: {
+                EditText urlText = (EditText) findViewById(R.id.rtspURL);
+                String strUrl = urlText.getText().toString();
+                mStreamUI.Start(strUrl);
+            }
+                break;
+            case R.id.btn_stoprtsp:
+                mStreamUI.Stop();
                 break;
         }
     }
