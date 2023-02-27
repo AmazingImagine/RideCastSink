@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.ridehome.castsink.vlc.MyControlVlcVideoView;
 
 public class VlcPlayerActivity extends AppCompatActivity {
-    public static String mPath01 = "rtsp://172.16.54.24:12345";
+    public static String mPath01 = "rtsp://172.16.54.241:12345";
     private RelativeLayout rootView;
     private MyControlVlcVideoView mPlayerView;
     private View.OnTouchListener onTouchVideoListener;

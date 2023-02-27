@@ -36,6 +36,7 @@ import com.ridehome.castsink.util.CoreUtil;
 import com.ridehome.castsink.util.EnumConfig;
 import com.ridehome.castsink.util.FileUtil;
 import com.ridehome.castsink.util.LogUtils;
+import com.ridehome.castsink.wifip2p.socket.ReceiveSocket;
 import com.vlc.lib.RecordEvent;
 import com.vlc.lib.VlcVideoView;
 import com.vlc.lib.listener.MediaListenerEvent;
@@ -58,9 +59,9 @@ import io.reactivex.disposables.Disposable;
 public class MyControlVlcVideoView extends RelativeLayout implements GestureDetector.OnGestureListener, View.OnClickListener {
     private Context mContext;
     private RelativeLayout mRootLayout;
-    private LinearLayout mVideoGestureLayout;
-    private ImageView mVideoGestureImg;
-    private TextView mVideoGestureText;
+    //private LinearLayout mVideoGestureLayout;
+   // private ImageView mVideoGestureImg;
+  //  private TextView mVideoGestureText;
 
     //播放器手势
     private GestureDetector mGestureDetector;
@@ -101,9 +102,9 @@ public class MyControlVlcVideoView extends RelativeLayout implements GestureDete
     private OnTouchListener onTouchVideoListener;
     private VlcVideoView mVlcVideoPlayerView;
     private TextView mVlvErrorTextView;
-    private ENDownloadView mVlvLoadingView;
+    //private ENDownloadView mVlvLoadingView;
     private ENPlayView mVlvPlayView;
-    private ImageView mBottomVideoFull;
+
     private ImageView mLockView;
     private TextView mRightPathType;
     private TextView mRightMic;
@@ -133,28 +134,28 @@ public class MyControlVlcVideoView extends RelativeLayout implements GestureDete
             super.handleMessage(msg);
             switch (msg.what) {
 
-                case SHOW_TIME://设置播放器时间
-                    mBottomTime.setText(msg.obj + "");
-                    break;
+//                case SHOW_TIME://设置播放器时间
+//                    mBottomTime.setText(msg.obj + "");
+//                    break;
                 case SHOW_TOAST://toast提示
                     ToastUtils.make().setNotUseSystemToast().setGravity(Gravity.CENTER, 0, 0)
                             .setTextColor(getResources().getColor(R.color.color_ffffff))
                             .setBgResource(R.drawable.shape_toast_000000_98)
                             .show((String) msg.obj);
                     break;
-                case SHOW_HIDE_PLAYER_VIEW://播放器,加载,播放,错误view的显示与隐藏
-                    showHidePlayLoadingView((int) msg.obj);
-                    break;
-                case RECORD_START://开始录像
-                    setTextColor(getResources().getColor(R.color.colorAccent), getResources().getString(R.string.vlc_video));
-                    Drawable record_start = getResources().getDrawable(R.drawable.icon_record_pre);
-                    mRightRecord.setCompoundDrawablesWithIntrinsicBounds(null, record_start, null, null);
-                    break;
-                case RECORD_STOP://结束录像
-                    setTextColor(getResources().getColor(R.color.white), getResources().getString(R.string.vlc_video));
-                    Drawable record_end = getResources().getDrawable(R.drawable.icon_record_nore);
-                    mRightRecord.setCompoundDrawablesWithIntrinsicBounds(null, record_end, null, null);
-                    break;
+//                case SHOW_HIDE_PLAYER_VIEW://播放器,加载,播放,错误view的显示与隐藏
+//                    showHidePlayLoadingView((int) msg.obj);
+//                    break;
+//                case RECORD_START://开始录像
+//                    setTextColor(getResources().getColor(R.color.colorAccent), getResources().getString(R.string.vlc_video));
+//                    Drawable record_start = getResources().getDrawable(R.drawable.icon_record_pre);
+//                    mRightRecord.setCompoundDrawablesWithIntrinsicBounds(null, record_start, null, null);
+//                    break;
+//                case RECORD_STOP://结束录像
+//                    setTextColor(getResources().getColor(R.color.white), getResources().getString(R.string.vlc_video));
+//                    Drawable record_end = getResources().getDrawable(R.drawable.icon_record_nore);
+//                    mRightRecord.setCompoundDrawablesWithIntrinsicBounds(null, record_end, null, null);
+//                    break;
             }
         }
     };
@@ -185,7 +186,7 @@ public class MyControlVlcVideoView extends RelativeLayout implements GestureDete
 
         //初始化控件
         initControlView();
-        mVideoGestureLayout.getBackground().setAlpha(110);
+        // mVideoGestureLayout.getBackground().setAlpha(110);
 //        mRootLayout.setOnTouchListener(mOnTouchVideoListener);
         mRootLayout.setLongClickable(true);  //手势需要
         //视频播放器手势
@@ -196,21 +197,8 @@ public class MyControlVlcVideoView extends RelativeLayout implements GestureDete
 
         //自新封装的控制布局
         mPlayerView = findViewById(R.id.player);
-
-        mControlBottomLayout = findViewById(R.id.layout_control_bottom);
-        mBottomTime = findViewById(R.id.tv_bottom_time);
-        mBottomVideoFull = findViewById(R.id.iv_bottom_video_full);
-
-        mControlMiddleLayout = findViewById(R.id.layout_control_middle);
-        //错误提示
-        mVlvErrorTextView = findViewById(R.id.vlc_error_text);
-        //加载的loading
-        mVlvLoadingView = findViewById(R.id.vlc_loading);
-        //点击重新加载的view
-        mVlvPlayView = findViewById(R.id.vlc_play);
         mRelativeAll = findViewById(R.id.root_layout_vlc);
-        //设置播放样式
-        setPageType(EnumConfig.PageType.SHRINK);
+
         responseListener();
     }
 
@@ -228,9 +216,9 @@ public class MyControlVlcVideoView extends RelativeLayout implements GestureDete
 
     private void initControlView() {
         mRootLayout = findViewById(R.id.root_layout_vlc);
-        mVideoGestureLayout = findViewById(R.id.video_gesture_layout);
-        mVideoGestureImg = findViewById(R.id.video_gesture_img);
-        mVideoGestureText = findViewById(R.id.video_gesture_text);
+//        mVideoGestureLayout = findViewById(R.id.video_gesture_layout);
+//        mVideoGestureImg = findViewById(R.id.video_gesture_img);
+//        mVideoGestureText = findViewById(R.id.video_gesture_text);
     }
 
 
@@ -243,6 +231,7 @@ public class MyControlVlcVideoView extends RelativeLayout implements GestureDete
                 mDownY = motionEvent.getY();
                 mIsFirstScroll = true;  // 设定是触摸屏幕后第一次scroll的标志
                 mCurrentVolume = mAudiomanager.getStreamVolume(AudioManager.STREAM_MUSIC); // 获取当前音量值
+                ReceiveSocket.getInstance().OnMotionEvent(9,mDownX,mDownY);
                 //第一次进入，获取的当前亮度为系统目前亮度（此时getWindow().getAttributes().screenBrightness = -1.0）
                 //未退出再次在该界面调节时，获取当前已调节的亮度
                 if (((Activity) mContext).getWindow().getAttributes().screenBrightness < 0) {
@@ -254,9 +243,14 @@ public class MyControlVlcVideoView extends RelativeLayout implements GestureDete
                 float upX = motionEvent.getX();
                 float upY = motionEvent.getY();
                 GESTURE_FLAG = 0;// 手指离开屏幕后，重置调节音量或进度的标志
-                mVideoGestureLayout.setVisibility(GONE);
+                //mVideoGestureLayout.setVisibility(GONE);
                 //通过down和up来判断手势是否移动，部分机型用MotionEvent.ACTION_MOVE判断会有误
                 if (Math.abs(upX - mDownX) > 20 || Math.abs(upY - mDownY) > 20) {
+                               if(upX<mDownX){
+                                   // 返回，通知手机执行返回动作
+                                   ReceiveSocket.getInstance().OnMotionEvent(10,upX,upY);
+                               }
+
                 } else {  //非手势移动，才自动显示/隐藏状态栏
 
                 }
@@ -349,10 +343,10 @@ public class MyControlVlcVideoView extends RelativeLayout implements GestureDete
         int varX = (int) (e2.getX() - e1.getX());
         int varY = (int) (e2.getY() - e1.getY());
         if (mIsFirstScroll) {// 以触摸屏幕后第一次滑动为标准，避免在屏幕上操作切换混乱
-            mVideoGestureLayout.setVisibility(VISIBLE);
+           // mVideoGestureLayout.setVisibility(VISIBLE);
             // 横向的距离变化大则调整进度，纵向的变化大则调整音量
             if (Math.abs(distanceX) >= Math.abs(distanceY)) {    //调节进度
-                mVideoGestureLayout.setVisibility(GONE);
+               // mVideoGestureLayout.setVisibility(GONE);
 
             } else {
                 if (ex < mRootLayout.getWidth() / 2) {     //左半边亮度
@@ -363,7 +357,7 @@ public class MyControlVlcVideoView extends RelativeLayout implements GestureDete
             }
         }
         if (GESTURE_FLAG == GESTURE_MODIFY_BRIGHT) {
-            mVideoGestureImg.setImageResource(R.drawable.brightness);
+            //mVideoGestureImg.setImageResource(R.drawable.brightness);
             int slideHeight = mRootLayout.getHeight() / 2;
             int midLevelPx = slideHeight / 15;
             int slideDistance = -varY;
@@ -383,7 +377,7 @@ public class MyControlVlcVideoView extends RelativeLayout implements GestureDete
             }
             lpa.screenBrightness = realBright / mMaxBrightness;
             ((Activity) mContext).getWindow().setAttributes(lpa);
-            mVideoGestureText.setText((int) (lpa.screenBrightness * 100) + "%");
+            //mVideoGestureText.setText((int) (lpa.screenBrightness * 100) + "%");
         } else if (GESTURE_FLAG == GESTURE_MODIFY_VOLUME) {
             if (Math.abs(distanceY) > Math.abs(distanceX)) {// 纵向移动大于横向移动
                 int slideHeight = mRootLayout.getHeight() / 2;
@@ -394,15 +388,15 @@ public class MyControlVlcVideoView extends RelativeLayout implements GestureDete
                 int realVolume = midLevelVolume * slideLevel + mCurrentVolume;
                 if (realVolume <= 0) {
                     realVolume = 0;
-                    mVideoGestureImg.setImageResource(R.drawable.volume_slience);
+                    //mVideoGestureImg.setImageResource(R.drawable.volume_slience);
                 } else {
-                    mVideoGestureImg.setImageResource(R.drawable.volume_not_slience);
+                    //mVideoGestureImg.setImageResource(R.drawable.volume_not_slience);
                 }
                 if (realVolume > mMaxVolume) {
                     realVolume = mMaxVolume;
                 }
                 int percentage = (realVolume * 100) / mMaxVolume;
-                mVideoGestureText.setText(percentage + "%");
+                //mVideoGestureText.setText(percentage + "%");
                 //设置音量大小，第一个参数：STREAM_VOICE_CALL(通话)、STREAM_SYSTEM(系统声音)、STREAM_RING(铃声)、STREAM_MUSIC(音乐)和STREAM_ALARM(闹铃)；
                 // 第二个参数：音量值，取值范围为0-7；
                 // 第三个参数：可选标志位，用于显示出音量调节UI(AudioManager.FLAG_SHOW_UI)。
@@ -433,28 +427,27 @@ public class MyControlVlcVideoView extends RelativeLayout implements GestureDete
      */
 
     private void responseListener() {
-        mBottomVideoFull.setOnClickListener(this);
-        mVlvPlayView.setOnClickListener(this);
+//        mVlvPlayView.setOnClickListener(this);
         mVlcVideoPlayerView.setMediaListenerEvent(new MediaListenerEvent() {
             @Override
             public void eventBuffing(int event, float buffing) {
-                if (buffing < 100) {
-                    mPlayStatueType = EnumConfig.PlayState.STATE_LOAD;
-                    if (mVlvLoadingView.getVisibility() == VISIBLE) {
-                        return;
-                    }
-                    handlerMsgShowHidePlayLoadingView(EnumConfig.PlayerState.PLAYER_SHOW_LOADING_VIEW);
-                    LogUtils.e(TAG + "mMediaListenerEvent====eventBuffing方法==buffing < 100==:" + buffing);
-                    //缓冲时不允许手势操作
-//                    mPlayerView.setGestureEnable(false);
-                } else if (buffing == 100) {
-                    LogUtils.e(TAG + "mMediaListenerEvent====eventBuffing方法==buffing == 100==:" + buffing);
-
-//                    mPlayerView.setGestureEnable(true);
-                    mPlayStatueType = EnumConfig.PlayState.STATE_PLAY;
-                    handlerMsgShowHidePlayLoadingView(EnumConfig.PlayerState.PLAYER_HIDE_LOADING_PLAY_VIEW);
-
-                }
+//                if (buffing < 100) {
+//                    mPlayStatueType = EnumConfig.PlayState.STATE_LOAD;
+//                    if (mVlvLoadingView.getVisibility() == VISIBLE) {
+//                        return;
+//                    }
+//                    handlerMsgShowHidePlayLoadingView(EnumConfig.PlayerState.PLAYER_SHOW_LOADING_VIEW);
+//                    LogUtils.e(TAG + "mMediaListenerEvent====eventBuffing方法==buffing < 100==:" + buffing);
+//                    //缓冲时不允许手势操作
+////                    mPlayerView.setGestureEnable(false);
+//                } else if (buffing == 100) {
+//                    LogUtils.e(TAG + "mMediaListenerEvent====eventBuffing方法==buffing == 100==:" + buffing);
+//
+////                    mPlayerView.setGestureEnable(true);
+//                    mPlayStatueType = EnumConfig.PlayState.STATE_PLAY;
+//                    handlerMsgShowHidePlayLoadingView(EnumConfig.PlayerState.PLAYER_HIDE_LOADING_PLAY_VIEW);
+//
+//                }
             }
 
             @Override
@@ -513,14 +506,11 @@ public class MyControlVlcVideoView extends RelativeLayout implements GestureDete
 //                mVlcVideoPlayerView.onStop();
 //                mListener.finishActivity();
 //                break;
-            case R.id.iv_bottom_video_full: //全屏
-                setVideoWindowType();
-                break;
-            case R.id.vlc_play: //点击重新加载
-                startLive(mPath01);
-                LogUtils.e(TAG + "点击重新加载");
-
-                break;
+//            case R.id.vlc_play: //点击重新加载
+//                startLive(mPath01);
+//                LogUtils.e(TAG + "点击重新加载");
+//
+//                break;
         }
     }
 
@@ -575,29 +565,29 @@ public class MyControlVlcVideoView extends RelativeLayout implements GestureDete
      */
     public void showHidePlayLoadingView(int type) {
         //显示loadingView,隐藏playView
-        if (EnumConfig.PlayerState.PLAYER_SHOW_LOADING_VIEW == type) {
-            mVlvLoadingView.setVisibility(View.VISIBLE);
-            mVlvPlayView.setVisibility(INVISIBLE);
-            mVlvErrorTextView.setVisibility(INVISIBLE);
-            mVlvLoadingView.start();
-        } else if (EnumConfig.PlayerState.PLAYER_SHOW_PLAY_VIEW == type) {
-            mVlvPlayView.setVisibility(VISIBLE);
-            mVlvLoadingView.setVisibility(INVISIBLE);
-            mVlvErrorTextView.setVisibility(INVISIBLE);
-            mVlvLoadingView.release();
-        } else if (EnumConfig.PlayerState.PLAYER_HIDE_LOADING_PLAY_VIEW == type) {
-            //全部隐藏
-            mVlvLoadingView.release();
-            mVlvPlayView.setVisibility(INVISIBLE);
-            mVlvLoadingView.setVisibility(INVISIBLE);
-            mVlvErrorTextView.setVisibility(INVISIBLE);
-        } else if (EnumConfig.PlayerState.PLAYER_SHOW_ERROR_VIEW == type) {
-            //显示错误文字和加载view
-            mVlvLoadingView.release();
-            mVlvLoadingView.setVisibility(INVISIBLE);
-            mVlvPlayView.setVisibility(VISIBLE);
-            mVlvErrorTextView.setVisibility(VISIBLE);
-        }
+//        if (EnumConfig.PlayerState.PLAYER_SHOW_LOADING_VIEW == type) {
+//            mVlvLoadingView.setVisibility(View.VISIBLE);
+//            mVlvPlayView.setVisibility(INVISIBLE);
+//            mVlvErrorTextView.setVisibility(INVISIBLE);
+//            mVlvLoadingView.start();
+//        } else if (EnumConfig.PlayerState.PLAYER_SHOW_PLAY_VIEW == type) {
+//            mVlvPlayView.setVisibility(VISIBLE);
+//            mVlvLoadingView.setVisibility(INVISIBLE);
+//            mVlvErrorTextView.setVisibility(INVISIBLE);
+//            mVlvLoadingView.release();
+//        } else if (EnumConfig.PlayerState.PLAYER_HIDE_LOADING_PLAY_VIEW == type) {
+//            //全部隐藏
+//            mVlvLoadingView.release();
+//            mVlvPlayView.setVisibility(INVISIBLE);
+//            mVlvLoadingView.setVisibility(INVISIBLE);
+//            mVlvErrorTextView.setVisibility(INVISIBLE);
+//        } else if (EnumConfig.PlayerState.PLAYER_SHOW_ERROR_VIEW == type) {
+//            //显示错误文字和加载view
+//            mVlvLoadingView.release();
+//            mVlvLoadingView.setVisibility(INVISIBLE);
+//            mVlvPlayView.setVisibility(VISIBLE);
+//            mVlvErrorTextView.setVisibility(VISIBLE);
+//        }
 
     }
 
@@ -750,8 +740,6 @@ public class MyControlVlcVideoView extends RelativeLayout implements GestureDete
                         }
                     });
         }
-
-
     }
 
 
@@ -852,34 +840,5 @@ public class MyControlVlcVideoView extends RelativeLayout implements GestureDete
     private void startLive(String path) {
         mVlcVideoPlayerView.setPath(path);
         mVlcVideoPlayerView.startPlay();
-    }
-
-    /**
-     * 设置播放器:全屏/半屏,显示
-     */
-    public void setVideoWindowType() {
-        int orientation = ((Activity) mContext).getRequestedOrientation();
-        if (orientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE || orientation == ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
-                || orientation == ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE) {
-            ((Activity) mContext).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); //竖屏
-            setPageType(EnumConfig.PageType.SHRINK);
-        } else {
-            ((Activity) mContext).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);//横屏
-            setPageType(EnumConfig.PageType.EXPAND);
-        }
-    }
-
-    /**
-     * 设置播放样式:全屏或者半屏
-     *
-     * @param pageType
-     */
-    public void setPageType(int pageType) {
-        mCurrPageType = pageType;
-        if (pageType == EnumConfig.PageType.SHRINK) {
-            mBottomVideoFull.setImageResource(R.drawable.nur_ic_fangda);
-        } else {
-            mBottomVideoFull.setImageResource(R.drawable.nur_ic_fangxiao);
-        }
     }
 }

@@ -63,17 +63,17 @@ public class VlcVideoView extends TextureView implements MediaPlayerControl, Vid
         ArrayList<String> options = new ArrayList<String>();
         //正式参数配置
         //值越大，缓存越大，延迟越大。这三项是延迟设置
-        options.add("--network-caching=300");//网络缓存
+        options.add("--network-caching=100");//网络缓存
         options.add(":clock-jitter=0");
         options.add(":clock-synchro=0");
 
-        options.add("--rtsp-caching=300");//
-        options.add("--tcp-caching=300");//TCP输入缓存值 (毫秒)
-        options.add("--realrtsp-caching=300");//RTSP缓存值 (毫秒)
-        options.add(":file-caching=300");//文件缓存
-        options.add(":live-cacheing=300");//直播缓存
+        options.add("--rtsp-caching=100");//
+        options.add("--tcp-caching=100");//TCP输入缓存值 (毫秒)
+        options.add("--realrtsp-caching=100");//RTSP缓存值 (毫秒)
+        options.add(":file-caching=100");//文件缓存
+        options.add(":live-cacheing=100");//直播缓存
         options.add("--file-caching");//文件缓存
-        options.add("--sout-mux-caching=300");//输出缓存
+        options.add("--sout-mux-caching=100");//输出缓存
         options.add("--no-drop-late-frames");//关闭丢弃晚的帧 (默认打开)
         options.add("--no-skip-frames");//关闭跳过帧 (默认打开)
         options.add(":rtsp-frame-buffer-size=1000"); //RTSP帧缓冲大小，默认大小为100000

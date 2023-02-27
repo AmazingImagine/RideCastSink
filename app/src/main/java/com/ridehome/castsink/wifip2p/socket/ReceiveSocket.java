@@ -23,7 +23,6 @@ import java.net.Socket;
  * description:服务端监听的socket
  */
 public class ReceiveSocket {
-
     public static final String TAG = "ReceiveSocket";
     public static final int PORT = 12349;
     private ServerSocket mServerSocket;
@@ -31,6 +30,30 @@ public class ReceiveSocket {
     private OutputStream mOutputStream;
     private InputStream mInputStream;
     private ConnectThread mConnectThread;
+
+    private static ReceiveSocket instance_;
+
+    public static ReceiveSocket getInstance(){
+        return instance_;
+    }
+
+    public void OnMotionEvent(int mask, float x, float y){
+        // send the motion to the sender
+        new Thread(new Runnable(){
+            @Override
+            public void run() {
+                if(null != mOutputStream){
+                    String strMsg = "MotionEvent:"+mask+":"+x+":"+y+";\n";
+                    try {
+                        mOutputStream.write(strMsg.getBytes());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+        }).start();
+    }
+
 
     private Handler mHandler = new Handler(Looper.getMainLooper()) {
 
@@ -68,7 +91,7 @@ public class ReceiveSocket {
                 mInputStream = mSocket.getInputStream();
 
 
-                String strMsg = "SinkOk\r\n";
+                String strMsg = "SinkOk;\n";
                 mOutputStream.write(strMsg.getBytes());
 
 
@@ -83,14 +106,14 @@ public class ReceiveSocket {
                         if(strRcv.contains("StreamOk")){
                             // find the url
                             String[] strArray = strRcv.split(":|;");
-                            if(strArray.length==4){
+                            if(strArray.length>=4){
                                 String rtspUrl = strArray[1]+":"+strArray[2]+":"+strArray[3];
                                 Log.i(TAG, "要播放RTSP:"+rtspUrl);
                                 MainActivity.getInstance().StartPlay(rtspUrl);
                             }
                         }
                     }
-                    Thread.sleep(500);
+                    Thread.sleep(30);
                 }
             } catch (Exception e) {
                 Log.e(TAG,e.toString());
@@ -105,13 +128,15 @@ public class ReceiveSocket {
 
 
     public void createServerSocket() {
-            if(null != mConnectThread){
-                mConnectThread.cancel();
-                mConnectThread = null;
-            }
+        instance_ = this;
 
-            mConnectThread = new ConnectThread();
-            mConnectThread.start();
+        if (null != mConnectThread) {
+            mConnectThread.cancel();
+            mConnectThread = null;
+        }
+
+        mConnectThread = new ConnectThread();
+        mConnectThread.start();
     }
 
     /**

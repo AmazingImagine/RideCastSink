@@ -13,18 +13,33 @@
         tools:layout_editor_absoluteX="1dp"
         tools:layout_editor_absoluteY="157dp">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal">
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
         <Button
             android:id="@+id/btn_create"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="150dp"
+            android:layout_height="40dp"
             android:text="开始WifiP2P" />
-
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
         <Button
             android:id="@+id/btn_remove"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="150dp"
+            android:layout_height="40dp"
             android:text="结束WifiP2P" />
-
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+    </LinearLayout>>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="480dp"
@@ -50,7 +65,7 @@
             android:id="@+id/rtspURL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="rtsp://192.168.49.143:12345"
+            android:text="rtsp://192.168.49.241:12345"
              />
 
         <LinearLayout
@@ -65,7 +80,7 @@
 
             <Button
                 android:id="@+id/btn_playrtsp"
-                android:layout_width="100dp"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:text="播放RTSP" />
 
@@ -76,7 +91,7 @@
 
             <Button
                 android:id="@+id/btn_stoprtsp"
-                android:layout_width="100dp"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:text="结束RTSP" />
 

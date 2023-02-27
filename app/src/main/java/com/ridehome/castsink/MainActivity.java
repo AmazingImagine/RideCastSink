@@ -17,6 +17,7 @@ import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -70,7 +71,7 @@ public class MainActivity extends BaseActivity implements ReceiveSocket.Progress
         rootView.setLongClickable(true);  //手势需要--能触摸
         rootView.setOnTouchListener(onTouchVideoListener);
 
-        mPlayerView.setPlayerTitle("P2P投屏世界");
+      //  mPlayerView.setPlayerTitle("P2P投屏世界");
 
         mPlayerView.setVlcControllerLayoutListener(new MyControlVlcVideoView.onVlcControllerLayoutListener() {
             @Override
@@ -106,6 +107,9 @@ public class MainActivity extends BaseActivity implements ReceiveSocket.Progress
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+
         setContentView(R.layout.activity_main);
 
         mInstance = this;
