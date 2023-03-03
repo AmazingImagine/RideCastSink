@@ -300,6 +300,8 @@ public class VlcPlayer implements MediaPlayerControl, Handler.Callback, IVLCVout
             mMediaPlayer = new MediaPlayer(libVLC);
 //                mMediaPlayer.setAudioOutput(VLCOptions.getAout(PreferenceManager.getDefaultSharedPreferences(mContext)));
 //               mMediaPlayer.setEqualizer(VLCOptions.getEqualizer(mContext));
+            // TODO
+            RecordEvent.getInstance().setVideoCallBack(mMediaPlayer,720,1280);
         }
         if (!isAttachedSurface && mMediaPlayer.getVLCVout().areViewsAttached()) {//异常判断
             mMediaPlayer.getVLCVout().detachViews();

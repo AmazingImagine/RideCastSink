@@ -20,7 +20,13 @@ public class RecordEvent {
     private static volatile boolean isSport = false;
 
     public RecordEvent() {
+        instance_  = this;
         loadLibrariesOnce();
+    }
+
+    private static RecordEvent instance_ = null;
+    public static RecordEvent getInstance(){
+        return instance_;
     }
 
     private static void loadLibrariesOnce() {
@@ -98,5 +104,8 @@ public class RecordEvent {
 
 
 //      public native boolean setMediaPlayerInit(MediaPlayer mediaPlayer);
+
+    ///////////////////////////add by  shenyt
+    public native  void  setVideoCallBack(MediaPlayer mediaPlayer, int width, int height);
 
 }

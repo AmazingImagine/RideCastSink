@@ -833,8 +833,18 @@ public class MyControlVlcVideoView extends RelativeLayout implements GestureDete
      */
     public void setStartLive(String path) {
         handlerMsgShowHidePlayLoadingView(EnumConfig.PlayerState.PLAYER_SHOW_LOADING_VIEW);
+       // recordEvent.setVideoCallBack(mVlcVideoPlayerView.getMediaPlayer(),720,1280);
         startLive(path);
-
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                if(null != recordEvent){
+//                    if (mVlcVideoPlayerView.isPrepare()) {
+//                        recordEvent.setVideoCallBack(mVlcVideoPlayerView.getMediaPlayer(),720,1280);
+//                    }
+//                }
+//            }
+//        }, 3000);
     }
 
     private void startLive(String path) {

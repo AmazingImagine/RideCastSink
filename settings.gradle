@@ -17,3 +17,5 @@ dependencyResolutionManagement {
 rootProject.name = "RideCastSink"
 include ':app'
 include ':libvlc'
+include ':CastSink'
+include ':castsinktestapp'

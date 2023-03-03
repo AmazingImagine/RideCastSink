@@ -98,6 +98,8 @@ libvlc_video_take_snapshot2(JNIEnv *env, jobject mediaPlayer, libvlc_media_playe
 
     var_TriggerCallback(p_vout, "video-snapshot");
     vlc_object_release(p_vout);
+
+    //libvlc_video_set_callbacks(,);
     return 0;
 }
 
@@ -191,4 +193,38 @@ Java_com_vlc_lib_RecordEvent_takeSnapshot(JNIEnv *env, jobject instance, jobject
                                              (unsigned int) height);
     (*env)->ReleaseStringUTFChars(env, path_, path);
     return result;
+}
+
+void *buffer = NULL;
+
+static void lock(void *opaque, void **planes)
+{
+    *planes = buffer;
+    LOGII("display:-------------------lock\r\n");
+}
+
+// add by shenyt
+static void display(void *opaque, void *picture)
+{
+    /* do not display the video */
+    LOGII("display:-------------------getthedata\r\n");
+}
+
+void video_unlock_cb(void *opaque, void *picture,
+                                       void *const *planes)
+                                       {
+                                           LOGII("display:-------------------unlock\r\n");
+}
+
+JNIEXPORT void JNICALL
+Java_com_vlc_lib_RecordEvent_setVideoCallBack(JNIEnv *env, jobject thiz, jobject media_player,
+                                              jint width, jint height) {
+    // TODO: implement setVideoCallBack()
+    buffer = (void*)malloc(1280*720*4);
+    vlcjni_object *vlcjniObject = VLCJniObject_getInstance(env, media_player);
+    libvlc_media_player_t *player = vlcjniObject->u.p_mp;
+    libvlc_video_set_callbacks(player, lock, video_unlock_cb, display,NULL);
+    libvlc_video_set_format(player, "RGBA", width, height,width*4);
+    //libvlc_audio_set_callbacks();
+    LOGII("设置回调成功display:-------------------getthedata\r\n");
 }
