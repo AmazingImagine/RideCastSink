@@ -12,8 +12,5 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-feature android:name="android.hardware.wifi.direct" android:required="true"/>
 
-    <application>
-            <service android:name="com.ridehome.castsink.wifip2p.Wifip2pService"
-                android:enabled="true" />
-    </application>
+    <application></application>
 </manifest>

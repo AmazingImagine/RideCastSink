@@ -44,6 +44,12 @@ android {
         exclude '**/libvlc.so'
         exclude '**/libvlcjni.so'
     }
+
+    android.libraryVariants.all{
+        variant->variant.outputs.all{
+            outputFileName = "MiraCastSink.aar"
+        }
+    }
 }
 
 dependencies {

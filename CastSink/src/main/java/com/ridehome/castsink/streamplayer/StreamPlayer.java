@@ -18,6 +18,8 @@ public class StreamPlayer {
     private ArrayList<String> options = null;
     private Context mContext = null;
 
+    private boolean mPlaying = false;
+
     public StreamPlayer(Context context){
         mContext = context;
         System.loadLibrary("streamPlayer");
@@ -40,11 +42,17 @@ public class StreamPlayer {
         if(ret)
         {
             mMediaPlayer.play();
+            mPlaying = true;
         }
     }
 
     public void Stop(){
-
+        if(mPlaying){
+            mMediaPlayer.stop();
+            mMediaPlayer.release();
+            mLibVLC.release();
+            destoryPlayer();
+        }
     }
 
     private void InitPlayer(){
@@ -122,9 +130,6 @@ public class StreamPlayer {
         return true;
     }
 
-
-
-
-
     public native  void  setVideoCallBack(MediaPlayer mediaPlayer);
+    public native  void  destoryPlayer();
 }

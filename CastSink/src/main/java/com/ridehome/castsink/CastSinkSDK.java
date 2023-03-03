@@ -26,11 +26,18 @@ public class CastSinkSDK {
 
     }
 
+    public void OnException(){
+        // 回收，释放资源
+        mWifiP2PController.Stop();
+        // 重新开始
+        mWifiP2PController.Start();
+    }
+
     public void Play(String strMRL){
         mStreamPlayer.Play(strMRL);
     }
 
     public void Stop(){
-
+        mStreamPlayer.Stop();
     }
 }

@@ -287,7 +287,6 @@ public class VlcPlayer implements MediaPlayerControl, Handler.Callback, IVLCVout
                 mMediaPlayer.setMedia(null);
                 media.release();
             }
-
         }
     }
 

@@ -20,8 +20,11 @@ public class WifiP2PController implements Wifip2pActionListener {
     public WifiP2pManager.Channel mChannel;
     public WifiP2pManager mWifiP2pManager;
     public Wifip2pReceiver mWifip2pReceiver;
+
+    private ReceiveSocket mReceiveSocket = new ReceiveSocket();
     private Intent mIntent;
-    private Wifip2pService.MyBinder mBinder;
+
+    private int mRetryCount = 0;
 
     private boolean mIsInGroup = false;
 
@@ -45,34 +48,42 @@ public class WifiP2PController implements Wifip2pActionListener {
     }
 
     public void Start(){
-        Stop();
-
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-
         mWifiP2pManager.createGroup(mChannel, new WifiP2pManager.ActionListener() {
             @Override
             public void onSuccess() {
+                mRetryCount = 0;
+
                 Log.e(TAG, "创建群组成功");
 
                 mIsInGroup = true;
 
-                mIntent = new Intent(mContext, Wifip2pService.class);
-                mContext.bindService(mIntent, serviceConnection, Context.BIND_AUTO_CREATE);
+                mReceiveSocket.createServerSocket();
             }
 
             @Override
             public void onFailure(int reason) {
                 Log.e(TAG, "创建群组失败: " + reason);
+                mRetryCount++;
+                if(mRetryCount<3){
+                    Stop();
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                    Start();
+                }
             }
         });
     }
 
     public void Stop(){
-        //if(mIsInGroup){
+
+            if(mIsInGroup){
+                mIsInGroup = false;
+                mReceiveSocket.clean();
+            }
+
             mWifiP2pManager.removeGroup(mChannel, new WifiP2pManager.ActionListener() {
                 @Override
                 public void onSuccess() {
@@ -84,7 +95,6 @@ public class WifiP2PController implements Wifip2pActionListener {
                     Log.e(TAG, "移除组群失败");
                 }
             });
-       // }
     }
 
 
@@ -121,8 +131,6 @@ public class WifiP2PController implements Wifip2pActionListener {
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            //调用服务里面的方法进行绑定
-            mBinder = (Wifip2pService.MyBinder) service;
         }
 
         @Override

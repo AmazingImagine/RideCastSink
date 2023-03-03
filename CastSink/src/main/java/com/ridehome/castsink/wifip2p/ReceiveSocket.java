@@ -52,22 +52,6 @@ public class ReceiveSocket {
         }).start();
     }
 
-
-    private Handler mHandler = new Handler(Looper.getMainLooper()) {
-
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what) {
-                case 40:
-                    if (mListener != null) {
-                        mListener.onSatrt();
-                    }
-                    break;
-            }
-        }
-    };
-
     // start a thread to proc the connect
     private class ConnectThread extends Thread {
         private Boolean mRunFlag;
@@ -88,13 +72,9 @@ public class ReceiveSocket {
                 mOutputStream = mSocket.getOutputStream();
                 mInputStream = mSocket.getInputStream();
 
-
                 String strMsg = "SinkOk;\n";
                 mOutputStream.write(strMsg.getBytes());
 
-
-                // 客户端IP地址 : /192.168.49.74:60482
-                //mInputStream = mSocket.getInputStream();
                 while (mRunFlag){
                     byte bytes[] = new byte[1024];
                     int x = mInputStream.read(bytes);
@@ -112,11 +92,11 @@ public class ReceiveSocket {
                             }
                         }
                     }
-                    Thread.sleep(30);
+                    Thread.sleep(10);
                 }
             } catch (Exception e) {
                 Log.e(TAG,e.toString());
-                Log.e(TAG, "P2P信息交互出现问题");
+                CastSinkSDK.getInstance().OnException();
             }
         }
 
@@ -139,30 +119,6 @@ public class ReceiveSocket {
     }
 
     /**
-     * 监听接收进度
-     */
-    private ProgressReceiveListener mListener;
-
-    public void setOnProgressReceiveListener(ProgressReceiveListener listener) {
-        mListener = listener;
-    }
-
-    public interface ProgressReceiveListener {
-
-        //开始传输
-        void onSatrt();
-
-        //当传输进度发生变化时
-        void onProgressChanged(File file, int progress);
-
-        //当传输结束时
-        void onFinished(File file);
-
-        //传输失败回调
-        void onFaliure(File file);
-    }
-
-    /**
      * 服务断开：释放内存
      */
     public void clean() {
@@ -170,7 +126,6 @@ public class ReceiveSocket {
             mConnectThread.cancel();
             mConnectThread = null;
         }
-
         if (mServerSocket != null) {
             try {
                 mServerSocket.close();
